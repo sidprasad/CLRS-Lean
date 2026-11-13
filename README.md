@@ -42,6 +42,8 @@ pinned dependency of the main project and uses Lean/Mathlib 4.33.1.
 Import `CLRSSpytial` to attach a default layout to the original red-black tree
 datatype: keys become labels, subtrees are ordered left/right, and node colors
 control styling. See the [setup and demo](spytial/README.md).
+The tree integration is verified; the rest of the book is not yet fully
+compatible with the newer Lean version. Use the focused build documented there.
 
 ## Proof Scope
 

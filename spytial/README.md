@@ -17,12 +17,9 @@ lake build CLRSSpytial SpytialDemos
 lake env lean spytial/Tests/RedBlackTree.lean
 ```
 
-This compiles the tree source, annotation library, and demo. To verify the
-entire book along with all Spytial modules, run:
-
-```sh
-lake build
-```
+This compiles the tree source, annotation library, and demo. These targets,
+the concrete and symbolic snapshots, and the rotation theorem's axiom check
+have passed on Lean 4.33.1.
 
 Open `spytial/Demos/RedBlackTree.lean` in the Lean editor and place the cursor
 on `#spytial sample`. The file also demonstrates inspection inside a proof of
@@ -71,3 +68,19 @@ tree nodes and four edges.
 
 The dependency's [rendering instructions](https://github.com/sidprasad/spytial-lean/blob/fc1e90ef8a96cf20e5059f9d1851a57a8776817e/render/README.md)
 describe how to render these snapshots with its browser harness.
+
+## Compatibility with the rest of the book
+
+The entire book has **not** been ported to Lean/Mathlib 4.33.1. The
+[full-build check](https://github.com/sidprasad/CLRS-Lean/actions/runs/43472492045)
+reported 89 errors across 32 existing book modules. The original CLRS proof
+sources are unchanged in this integration. Unported modules cannot currently
+be imported successfully with this toolchain.
+
+Use the focused build above to work with the red-black tree and Spytial.
+The full-book command is retained for future compatibility work and is
+currently expected to fail:
+
+```sh
+lake build
+```
