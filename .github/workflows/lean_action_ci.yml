@@ -26,6 +26,8 @@ jobs:
           path: |
             .lake/build/lib/lean/CLRSLean
             .lake/build/lib/lean/CLRSLean.*
+            .lake/build/ir/CLRSLean
+            .lake/build/ir/CLRSLean.*
           key: clrslean-build-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.lean') }}-${{ github.sha }}
           restore-keys: |
             clrslean-build-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.lean') }}-
@@ -37,6 +39,8 @@ jobs:
           path: |
             .lake/build/lib/lean/CLRSLean
             .lake/build/lib/lean/CLRSLean.*
+            .lake/build/ir/CLRSLean
+            .lake/build/ir/CLRSLean.*
           key: clrslean-build-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.lean') }}-${{ github.sha }}
       - name: Check Spytial annotation import and theorem trust
         run: lake env lean spytial/Tests/RedBlackTree.lean

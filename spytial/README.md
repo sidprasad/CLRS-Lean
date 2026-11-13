@@ -13,14 +13,15 @@ The Lean editor extension is needed to display the interactive widget.
 
 ```sh
 lake exe cache get
-lake build
+lake build CLRSSpytial SpytialDemos
 lake env lean spytial/Tests/RedBlackTree.lean
 ```
 
-For a focused build of the annotation library and demo:
+This compiles the tree source, annotation library, and demo. To verify the
+entire book along with all Spytial modules, run:
 
 ```sh
-lake build CLRSSpytial SpytialDemos
+lake build
 ```
 
 Open `spytial/Demos/RedBlackTree.lean` in the Lean editor and place the cursor
@@ -49,7 +50,8 @@ The layout follows the red-black tree example in
   sit right and below. Siblings share a horizontal level.
 - Empty leaves are hidden and excluded from layout constraints. All empty
   leaves share one Lean value, so constraining that value as a visible child
-  would produce contradictory positions.
+  would produce contradictory positions. Opaque subtrees in proof contexts
+  remain visible: the annotation matches the empty constructor explicitly.
 - Red nodes have red borders and fill. Black nodes use dark borders and a pale
   fill to keep key labels readable.
 
@@ -64,6 +66,8 @@ exports `spytial/Tests/cases/annotated-red-black-tree/props.json`, and checks
 that the existing rotation theorem uses only the standard Lean axioms.
 Generated cases are ignored by Git. The seven-node sample should render with
 six edges, two red nodes, five black nodes, and no layout error.
+The symbolic snapshot should retain all three opaque subtrees, giving five
+tree nodes and four edges.
 
 The dependency's [rendering instructions](https://github.com/sidprasad/spytial-lean/blob/fc1e90ef8a96cf20e5059f9d1851a57a8776817e/render/README.md)
 describe how to render these snapshots with its browser harness.
