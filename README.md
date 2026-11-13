@@ -35,6 +35,14 @@ See the [scope](docs/scope.md).
 The public project name is **CLRS-Lean**; Lean imports use `CLRSLean`.
 New code starts from `CLRSLean.FourthEdition.Chapter_NN`.
 
+## Spytial visualizations in this fork
+
+This fork adds [Spytial-Lean](https://github.com/sidprasad/spytial-lean) as a
+pinned dependency of the main project and uses Lean/Mathlib 4.33.1.
+Import `CLRSSpytial` to attach a default layout to the original red-black tree
+datatype: keys become labels, subtrees are ordered left/right, and node colors
+control styling. See the [setup and demo](spytial/README.md).
+
 ## Proof Scope
 
 The project formalizes selected fourth-edition CLRS sections, not every exercise
