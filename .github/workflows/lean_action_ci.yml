@@ -6,8 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      LEAN_NUM_THREADS: '3'
 
     steps:
       - uses: actions/checkout@v5
@@ -26,21 +24,17 @@ jobs:
           path: |
             .lake/build/lib/lean/CLRSLean
             .lake/build/lib/lean/CLRSLean.*
-            .lake/build/ir/CLRSLean
-            .lake/build/ir/CLRSLean.*
           key: clrslean-build-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.lean') }}-${{ github.sha }}
           restore-keys: |
             clrslean-build-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.lean') }}-
       - uses: leanprover/lean-action@v1
       - name: Save CLRSLean build cache
-        if: always() && steps.restore-build-cache.outputs.cache-hit != 'true'
+        if: steps.restore-build-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v5
         with:
           path: |
             .lake/build/lib/lean/CLRSLean
             .lake/build/lib/lean/CLRSLean.*
-            .lake/build/ir/CLRSLean
-            .lake/build/ir/CLRSLean.*
           key: clrslean-build-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.lean') }}-${{ github.sha }}
       - name: Check Spytial annotation import and theorem trust
         run: lake env lean spytial/Tests/RedBlackTree.lean

@@ -1,4 +1,4 @@
-import CLRSSpytial
+import CLRSLean.FourthEdition.Chapter_13.Section_13_1_Red_Black_Trees
 
 /-! Inspect an original CLRS red-black tree using its registered default layout. -/
 

@@ -4,7 +4,7 @@ import Demos.RedBlackTree
 
 open SpytialLean CLRS.Chapter13 CLRS.SpytialExamples
 
--- Importing the annotation module must register the layout in a downstream module.
+-- Importing the original RBT module must register the layout in a downstream module.
 #spytial_snapshot "annotated-red-black-tree" sample
 
 -- Opaque subtrees have no visible constructor fields, but must not be hidden as empty.

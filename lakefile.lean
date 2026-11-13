@@ -28,10 +28,6 @@ lean_lib «CLRSLean» where
   srcDir := "src"
 
 @[default_target]
-lean_lib CLRSSpytial where
-  srcDir := "spytial"
-
-@[default_target]
 lean_lib SpytialDemos where
   srcDir := "spytial"
   roots := #[`Demos]

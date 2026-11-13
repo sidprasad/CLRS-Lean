@@ -37,13 +37,11 @@ New code starts from `CLRSLean.FourthEdition.Chapter_NN`.
 
 ## Spytial visualizations in this fork
 
-This fork adds [Spytial-Lean](https://github.com/sidprasad/spytial-lean) as a
-pinned dependency of the main project and uses Lean/Mathlib 4.33.1.
-Import `CLRSSpytial` to attach a default layout to the original red-black tree
-datatype: keys become labels, subtrees are ordered left/right, and node colors
-control styling. See the [setup and demo](spytial/README.md).
-The tree integration is verified; the rest of the book is not yet fully
-compatible with the newer Lean version. Use the focused build documented there.
+Spytial-Lean is a pinned dependency. The original Chapter 13 red-black tree
+file contains its visualization annotations, activated by the normal RBT
+import. See the [demo instructions](spytial/README.md).
+The integration uses Lean/Mathlib 4.33.1; other book chapters are not yet fully
+compatible with that version.
 
 ## Proof Scope
 

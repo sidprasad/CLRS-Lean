@@ -1,4 +1,5 @@
 import Mathlib
+import SpytialLean
 
 /-!
 # CLRS Section 13.1 - Red-black trees
@@ -105,6 +106,32 @@ inductive RBTree where
   | empty : RBTree
   | node : Color → RBTree → Nat → RBTree → RBTree
   deriving Repr, DecidableEq
+
+-- The constructor has positional arguments: color, left, key, right.
+-- Spytial exposes them as node_0, node_1, node_2, and node_3 respectively.
+-- Match the empty constructor explicitly so opaque subtrees in proofs remain visible.
+open SpytialLean in
+spytial_spec RBTree [
+  orientation node_1.*(node_1 + node_3) &
+    ((RBTree - {t : RBTree | @:t = empty}) ->
+      (RBTree - {t : RBTree | @:t = empty})) left below,
+  orientation node_3.*(node_1 + node_3) &
+    ((RBTree - {t : RBTree | @:t = empty}) ->
+      (RBTree - {t : RBTree | @:t = empty})) right below,
+  align (~(node_1 + node_3).(node_1 + node_3) - iden) &
+    ((RBTree - {t : RBTree | @:t = empty}) ->
+      (RBTree - {t : RBTree | @:t = empty})) horizontal,
+  attribute node_2,
+  hideField node_0,
+  hideAtom Color + Nat + {t : RBTree | @:t = empty},
+  edgeStyle node_1 noLabels,
+  edgeStyle node_3 noLabels,
+  size RBTree 56 42,
+  atomStyle {t : RBTree | @:(t.node_0) = red}
+    (borderStyle "#b91c1c" 2) (fillStyle "#fee2e2") (textStyle "#7f1d1d"),
+  atomStyle {t : RBTree | @:(t.node_0) = black}
+    (borderStyle "#111827" 3) (fillStyle "#f3f4f6") (textStyle "#111827")
+]
 
 namespace RBTree
 
