@@ -553,7 +553,7 @@ target is not white-reachable. -/
 theorem not_whiteReachable_of_not_reachable {s : DFSState V} {u v : V}
     (hno : ¬ G.Reachable u v) : ¬ WhiteReachable G s u v := by
   intro hwr
-  exact hno (hwr.mono (fun _ _ h => h.1))
+  exact hno (Relation.ReflTransGen.mono (fun _ _ h => h.1) u v hwr)
 
 /-- At the discovery state of {lit}`r`, any vertex whose final discovery time is
 not earlier than {lit}`r`'s is still white. -/
