@@ -2,9 +2,17 @@ name: Lean Action CI
 
 on:
   workflow_dispatch:
+    inputs:
+      scope:
+        description: Build scope
+        required: true
+        type: choice
+        default: full
+        options: [full, spytial]
 
 jobs:
   build:
+    if: inputs.scope != 'spytial'
     runs-on: ubuntu-latest
 
     steps:
@@ -40,3 +48,60 @@ jobs:
         run: lake env lean spytial/Tests/RedBlackTree.lean
       - name: Check v1 theorem trust gate
         run: python3 scripts/check_v1_trust_gate.py
+
+  spytial:
+    name: Spytial red-black tree integration
+    if: inputs.scope == 'spytial'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install elan
+        run: |
+          curl -sSfLO https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh
+          chmod +x elan-init.sh
+          ./elan-init.sh -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '11'
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.elan
+            .lake/packages
+          key: clrs-spytial-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}
+      - name: Check repository metadata
+        run: python3 scripts/check_repository.py
+      - name: Fetch Mathlib cache
+        run: lake exe cache get
+      - name: Prepare widget source and browser dependencies
+        run: |
+          pnpm -C .lake/packages/spytialLean install --frozen-lockfile
+          # The release archive does not include the TypeScript build output
+          # imported by the development harness.
+          pnpm -C .lake/packages/spytialLean/widget run build
+      - name: Build red-black tree module, demos and browser harness
+        run: lake build CLRSLean.FourthEdition.Chapter_13.Section_13_1_Red_Black_Trees SpytialDemos spytialLean/renderHarnessJs
+      - name: Check snapshots and theorem trust
+        run: lake env lean spytial/Tests/RedBlackTree.lean
+      - name: Install Chromium
+        run: pnpm -C .lake/packages/spytialLean/render exec playwright install --with-deps chromium
+      - name: Check collapsed explorer in the actual rotation proof
+        run: node spytial/Tests/inspection-explorer.mjs
+        env:
+          SPYTIAL_RPC_TIMEOUT_MS: '600000'
+      - name: Save infoview preview
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spytial-inspection-explorer
+          path: |
+            .lake/rotation-explorer.png
+            .lake/rotation-explorer.json
+          if-no-files-found: ignore

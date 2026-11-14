@@ -17,8 +17,7 @@ require «doc-gen4» from git
 require verso from git
   "https://github.com/leanprover/verso" @ "v4.33.0"
 
-require spytialLean from git "https://github.com/sidprasad/spytial-lean" @
-  "fc1e90ef8a96cf20e5059f9d1851a57a8776817e"
+require spytialLean from git "https://github.com/sidprasad/spytial-lean" @ "v0.2.1"
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git" @ "v4.33.1"
