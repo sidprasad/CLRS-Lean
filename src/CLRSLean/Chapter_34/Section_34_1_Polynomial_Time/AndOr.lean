@@ -425,8 +425,7 @@ lemma step₁_ne_iff (c₁ : TM2.Cfg M₁.tm.Γ M₁.tm.Λ M₁.tm.σ) :
   · intro h hcl
     rcases c₁ with ⟨l, v, S⟩
     cases l
-    · simp [TM2.step] at h
-      exact h rfl
+    · simpa [TM2.step] using h
     · cases hcl
   · intro hcl
     rcases c₁ with ⟨l, v, S⟩
@@ -441,8 +440,7 @@ lemma step₂_ne_iff (c₂ : TM2.Cfg M₂.tm.Γ M₂.tm.Λ M₂.tm.σ) :
   · intro h hcl
     rcases c₂ with ⟨l, v, S⟩
     cases l
-    · simp [TM2.step] at h
-      exact h rfl
+    · simpa [TM2.step] using h
     · cases hcl
   · intro hcl
     rcases c₂ with ⟨l, v, S⟩
@@ -460,7 +458,6 @@ lemma step₁_sim (c₁ : TM2.Cfg M₁.tm.Γ M₁.tm.Λ M₁.tm.σ) (hc₁ : c�
       exfalso
       exact hc₁ rfl
   | some l₁ =>
-      simp [FinTM2.step, TM2.step, mapCfg₁]
       change some (TM2.stepAux (mapStmt₁ M₁ M₂ (M₁.tm.m l₁)) (v, M₂.tm.initialState, AndOrSt.initial)
           (stk M₁ M₂ S₁ S₂)) =
         some (mapCfg₁ M₁ M₂ (TM2.stepAux (M₁.tm.m l₁) v S₁) S₂)
@@ -476,7 +473,6 @@ lemma step₂_sim (c₂ : TM2.Cfg M₂.tm.Γ M₂.tm.Λ M₂.tm.σ) (hc₂ : c�
       exfalso
       exact hc₂ rfl
   | some l₂ =>
-      simp [FinTM2.step, TM2.step, mapCfg₂]
       change some (TM2.stepAux (mapStmt₂ M₁ M₂ (M₂.tm.m l₂)) (M₁.tm.initialState, v, AndOrSt.initial)
           (stk M₁ M₂ S₁ S₂)) =
         some (mapCfg₂ M₁ M₂ (TM2.stepAux (M₂.tm.m l₂) v S₂) S₁)
@@ -535,11 +531,7 @@ lemma dup_copyout_phase {x : List Γ} {S : ∀ k : AndOrK M₁ M₂, List (AndOr
   | nil =>
       have hhead : (S inK).head? = none := by rw [h]; simp
       have htail : (S inK).tail = [] := by rw [h]; simp
-      have hcollapse : Function.update (Function.update S inK []) tmpK T = Function.update S inK [] := by
-        rw [update_swap M₁ M₂ inK tmpK ([] : List (M₁.tm.Γ M₁.tm.k₀)) T (by simp [inK, tmpK])]
-        rw [update_self M₁ M₂ tmpK T ht]
-      simp [andOrMachine, andOrProgram, extraProgram, flip, hhead, htail]
-      rw [hcollapse]
+      simp [andOrMachine, andOrProgram, extraProgram, flip, hhead, htail, ht]
   | cons a x' ih =>
       have hhead : (S inK).head? = some (M₁.inputAlphabet.invFun a) := by rw [h]; simp
       have htail : (S inK).tail = List.map M₁.inputAlphabet.invFun x' := by rw [h]; simp
