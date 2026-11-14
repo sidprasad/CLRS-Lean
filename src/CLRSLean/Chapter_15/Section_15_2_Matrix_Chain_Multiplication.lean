@@ -231,7 +231,7 @@ theorem matrixChainOpt_lowerBound (dims : Nat → Nat) :
   · intro i j k hk
     rcases Finset.mem_Icc.mp hk with ⟨hik, hkj⟩
     by_cases hij : i < j
-    · unfold matrixChainOpt; simp [hij]
+    · unfold matrixChainOpt; simp only [dif_pos hij]
       unfold matrixSplitCost
       have hm : (⟨k, Finset.mem_Icc.mpr ⟨hik, hkj⟩⟩ : {x // x ∈ Finset.Icc i (j - 1)}) ∈
           (Finset.Icc i (j - 1)).attach := by simp

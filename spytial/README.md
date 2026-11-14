@@ -55,9 +55,9 @@ there are no hand-authored checkmark badges on selected children. Spytial
 follows shared Lean identities such as the subtree `b` when they are available
 in the same goal; separate proof branches use independent layouts.
 
-The pinned Spytial-Lean v0.2.1 dependency uses Lean 4.33.1. The tree integration is
-verified on that version; the [full book build](https://github.com/sidprasad/CLRS-Lean/actions/runs/43472492045)
-currently fails in other chapters, so use the focused build above.
+The pinned Spytial-Lean v0.2.1 dependency uses Lean 4.33.1. Use the focused build
+above for visualization development. The manual CI workflow's `full` scope builds
+the book and checks the flagship theorem axioms across all 35 chapters.
 
 ## Infoview regression check
 

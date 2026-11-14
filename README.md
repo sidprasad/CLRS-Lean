@@ -40,8 +40,8 @@ New code starts from `CLRSLean.FourthEdition.Chapter_NN`.
 Spytial-Lean is a pinned dependency. The original Chapter 13 red-black tree
 file contains its visualization annotations, activated by the normal RBT
 import. See the [demo instructions](spytial/README.md).
-The integration uses Lean/Mathlib 4.33.1; other book chapters are not yet fully
-compatible with that version.
+The integration uses Lean/Mathlib 4.33.1. The manual CI workflow provides full-book
+verification and a focused Spytial browser check.
 
 ## Proof Scope
 
