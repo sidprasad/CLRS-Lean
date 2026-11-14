@@ -4,7 +4,10 @@ open Lake DSL
 package «clrs-lean» where
   leanOptions := #[
     ⟨`pp.unicode.fun, true⟩,
-    ⟨`doc.verso, true⟩
+    ⟨`doc.verso, true⟩,
+    -- Keep the existing proof automation matching behavior on Lean 4.33.
+    -- Every resulting proof is still checked by the kernel.
+    ⟨`backward.isDefEq.respectTransparency, false⟩
   ]
   moreLeanArgs := #[
     "-Dwarn.sorry=false"

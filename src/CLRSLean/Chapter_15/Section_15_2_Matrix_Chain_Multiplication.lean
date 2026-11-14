@@ -241,7 +241,7 @@ theorem matrixChainOpt_lowerBound (dims : Nat → Nat) :
       let f : {x // x ∈ Finset.Icc i (j - 1)} → ℕ :=
         λ r => matrixChainOpt dims i r.1 + matrixChainOpt dims (r.1 + 1) j +
           dims i * dims (r.1 + 1) * dims (j + 1)
-      simpa [f] using Finset.inf'_le f hm
+      simpa only [f] using Finset.inf'_le f hm
     · have hzero : matrixChainOpt dims i j = 0 := by
         unfold matrixChainOpt; simp [hij]
       rw [hzero]
@@ -269,12 +269,12 @@ private lemma bridge_attach_inf (dims : Nat → Nat) (i j : Nat) (hij : i < j) :
       apply Finset.le_inf' Hs f
       intro x hx
       have hm : (⟨x, hx⟩ : {x // x ∈ s}) ∈ s.attach := by simp
-      simpa [f, g] using Finset.inf'_le g hm
+      simpa only [f, g] using Finset.inf'_le g hm
     · -- inf' ≤ attach.inf', via lower bound on attach.inf'
       apply Finset.le_inf' h_att g
       intro r hr
       -- r ∈ s.attach, so r.2 : r.1 ∈ s
-      simpa [f, g] using Finset.inf'_le f r.2
+      simpa only [f, g] using Finset.inf'_le f r.2
   rw [h1, h2]
 
 private lemma exists_inf'_eq (s : Finset ℕ) (h : s.Nonempty) (f : ℕ → ℕ) :

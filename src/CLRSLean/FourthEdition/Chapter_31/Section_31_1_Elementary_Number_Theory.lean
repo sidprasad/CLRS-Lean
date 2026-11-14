@@ -203,7 +203,7 @@ theorem lcm_eq_zero_iff (a b : ℕ) : Nat.lcm a b = 0 ↔ a = 0 ∨ b = 0 :=
 
 /-- **CLRS identity**: {lit}`gcd(a, b) · lcm(a, b) = a · b`. -/
 theorem gcd_mul_lcm_eq (a b : ℕ) : Nat.gcd a b * Nat.lcm a b = a * b :=
-  associated_iff_eq.mp (_root_.gcd_mul_lcm a b)
+  Nat.gcd_mul_lcm a b
 
 /-- For coprime {lit}`a` and {lit}`b`, the least common multiple is the product
 {lit}`a · b`. -/
