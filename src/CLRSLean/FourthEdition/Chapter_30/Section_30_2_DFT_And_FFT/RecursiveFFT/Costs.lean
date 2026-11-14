@@ -208,9 +208,8 @@ theorem recursiveFFTExec_zeroPad_work [Ring K] {n : Nat}
     (omega : K) (a : CoeffVector K n) :
     (recursiveFFTExec (k := fftExponent n) omega
       (zeroPadToFFTCapacity a)).work = paddedFFTWork n := by
-  rw [← recursiveFFTWork]
-  rw [recursiveFFTWork_eq_radix2FFTWork]
-  rfl
+  change recursiveFFTWork omega (zeroPadToFFTCapacity a) = _
+  exact recursiveFFTWork_eq_radix2FFTWork omega (zeroPadToFFTCapacity a)
 
 end Chapter30
 end CLRS
