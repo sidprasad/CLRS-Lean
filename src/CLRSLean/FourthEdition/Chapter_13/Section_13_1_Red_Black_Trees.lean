@@ -121,12 +121,12 @@ spytial_spec RBTree [
   align (~(node_1 + node_3).(node_1 + node_3) - iden) &
     ((RBTree - {t : RBTree | @:t = empty}) ->
       (RBTree - {t : RBTree | @:t = empty})) horizontal,
-  attribute node_2,
+  tag RBTree "key" node_2,
+  hideField node_2,
   hideField node_0,
   hideAtom Color + Nat + {t : RBTree | @:t = empty},
   edgeStyle node_1 noLabels,
   edgeStyle node_3 noLabels,
-  size RBTree 56 42,
   atomStyle {t : RBTree | @:(t.node_0) = red}
     (borderStyle "#b91c1c" 2) (fillStyle "#fee2e2") (textStyle "#7f1d1d"),
   atomStyle {t : RBTree | @:(t.node_0) = black}
@@ -134,6 +134,9 @@ spytial_spec RBTree [
 ]
 
 namespace RBTree
+
+-- Diagram inspections deliberately leave the proof goal unchanged.
+#allow_unused_tactic SpytialLean.spytialTactic
 
 /-- Membership of a key in a colored binary tree. -/
 def InTree (x : Nat) : RBTree → Prop
@@ -242,6 +245,10 @@ theorem noRedRed_repaint_black {t : RBTree}
       trivial
   | node color left key right =>
       simp [repaintRoot, NoRedRed]
+      spytial (node .black left key right) fyi [h.1, h.2.1] with [
+        .., hideField NoRedRed,
+        tag (RBTree.node_1) "✓ h.1 · NoRedRed" NoRedRed,
+        tag (RBTree.node_3) "✓ h.2.1 · NoRedRed" NoRedRed]
       exact ⟨h.1, h.2.1⟩
 
 /-- Repainting the root preserves balanced child black heights. -/
@@ -308,6 +315,15 @@ theorem redBlackShape_repaint_rotateLeft_red_red
     RedBlackShape
       (repaintRoot Color.black
         (rotateLeft (node Color.red a x (node Color.red b y c)))) := by
+  let before := node .red a x (node .red b y c)
+  let after := repaintRoot .black (rotateLeft before)
+  -- Both views use the common black height of a, b, and c from hab and hbc.
+  spytial before observing [blackHeight] with [
+    .., attribute blackHeight,
+    hideField RootBlack, hideField NoRedRed, hideField BalancedBlackHeight]
+  spytial after observing [blackHeight] with [
+    .., attribute blackHeight,
+    hideField RootBlack, hideField NoRedRed, hideField BalancedBlackHeight]
   rcases ha with ⟨haRoot, haNoRed, haBalanced⟩
   rcases hb with ⟨hbRoot, hbNoRed, hbBalanced⟩
   rcases hc with ⟨_, hcNoRed, hcBalanced⟩
