@@ -246,9 +246,7 @@ theorem noRedRed_repaint_black {t : RBTree}
   | node color left key right =>
       simp [repaintRoot, NoRedRed]
       spytial (node .black left key right) fyi [h.1, h.2.1] with [
-        .., hideField NoRedRed,
-        tag (RBTree.node_1) "✓ h.1 · NoRedRed" NoRedRed,
-        tag (RBTree.node_3) "✓ h.2.1 · NoRedRed" NoRedRed]
+        .., hideField NoRedRed]
       exact ⟨h.1, h.2.1⟩
 
 /-- Repainting the root preserves balanced child black heights. -/
@@ -315,15 +313,21 @@ theorem redBlackShape_repaint_rotateLeft_red_red
     RedBlackShape
       (repaintRoot Color.black
         (rotateLeft (node Color.red a x (node Color.red b y c)))) := by
-  let before := node .red a x (node .red b y c)
-  let after := repaintRoot .black (rotateLeft before)
-  -- Both views use the common black height of a, b, and c from hab and hbc.
-  spytial before observing [blackHeight] with [
+  let input := node .red a x (node .red b y c)
+  let rotated := rotateLeft input
+  let repaired := repaintRoot .black rotated
+  -- hab and hbc equate the black heights of the fringe subtrees a, b, and c.
+  spytial input observing [blackHeight] with [
     .., attribute blackHeight,
     hideField RootBlack, hideField NoRedRed, hideField BalancedBlackHeight]
-  spytial after observing [blackHeight] with [
+  spytial rotated observing [blackHeight] with [
     .., attribute blackHeight,
     hideField RootBlack, hideField NoRedRed, hideField BalancedBlackHeight]
+    titled "After rotation"
+  spytial repaired observing [blackHeight] with [
+    .., attribute blackHeight,
+    hideField RootBlack, hideField NoRedRed, hideField BalancedBlackHeight]
+    titled "After repaint"
   rcases ha with ⟨haRoot, haNoRed, haBalanced⟩
   rcases hb with ⟨hbRoot, hbNoRed, hbBalanced⟩
   rcases hc with ⟨_, hcNoRed, hcBalanced⟩
