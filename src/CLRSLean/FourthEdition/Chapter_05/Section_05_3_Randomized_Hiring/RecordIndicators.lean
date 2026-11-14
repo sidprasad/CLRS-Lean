@@ -183,7 +183,6 @@ theorem hireAssistant_permutationRanks_eq_sum {n : Nat}
     apply Fin.ext
     simp [e, Fin.castOrderIso_apply]
   rw [he]
-  simp
 
 end Chapter05
 end CLRS
