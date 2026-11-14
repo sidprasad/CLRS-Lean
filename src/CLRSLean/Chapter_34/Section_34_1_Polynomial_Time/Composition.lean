@@ -355,7 +355,6 @@ lemma step₁_sim (c₁ : Turing.TM2.Cfg (h1.tm).Γ (h1.tm).Λ (h1.tm).σ)
       exfalso
       exact hc₁ rfl
   | some l₁ =>
-      simp [FinTM2.step, Turing.TM2.step, mapCfg₁]
       change some (Turing.TM2.stepAux (mapStmt₁ h1 h2 ((h1.tm).m l₁)) (v, (h2.tm).initialState)
           (stk₁ h1 h2 S)) =
         some (mapCfg₁ h1 h2 (Turing.TM2.stepAux ((h1.tm).m l₁) v S))
@@ -475,7 +474,6 @@ lemma step₂_sim (c₂ : Turing.TM2.Cfg (h2.tm).Γ (h2.tm).Λ (h2.tm).σ) :
   | none =>
       rfl
   | some l₂ =>
-      simp [FinTM2.step, Turing.TM2.step, mapCfg₂]
       change some (Turing.TM2.stepAux (mapStmt₂ h1 h2 ((h2.tm).m l₂)) ((h1.tm).initialState, v)
           (stk₂ h1 h2 S)) =
         some (mapCfg₂ h1 h2 (Turing.TM2.stepAux ((h2.tm).m l₂) v S))
@@ -488,8 +486,7 @@ lemma step₁_ne_iff (c₁ : Turing.TM2.Cfg (h1.tm).Γ (h1.tm).Λ (h1.tm).σ) :
   · intro h hcl
     rcases c₁ with ⟨l, v, S⟩
     cases l
-    · simp [Turing.TM2.step, hcl] at h
-      exact h rfl
+    · simpa [Turing.TM2.step, hcl] using h
     · cases hcl
   · intro hcl
     rcases c₁ with ⟨l, v, S⟩
@@ -504,8 +501,7 @@ lemma step₂_ne_iff (c₂ : Turing.TM2.Cfg (h2.tm).Γ (h2.tm).Λ (h2.tm).σ) :
   · intro h hcl
     rcases c₂ with ⟨l, v, S⟩
     cases l
-    · simp [Turing.TM2.step, hcl] at h
-      exact h rfl
+    · simpa [Turing.TM2.step, hcl] using h
     · cases hcl
   · intro hcl
     rcases c₂ with ⟨l, v, S⟩
@@ -1058,8 +1054,7 @@ def notComputableInPolyTime : TM2ComputableInPolyTime boolEncoding boolEncoding 
     simp [TM2OutputsInTime, notInputAlphabet, notOutputAlphabet, boolEncoding]
     let e : EvalsTo notMachine.step (initList notMachine [b]) (some (haltList notMachine [!b])) := by
       refine ⟨1, ?_⟩
-      simp [notMachine, initList, haltList, TM2.step, TM2.stepAux, flip]
-      congr 1
+      cases b <;> rfl
     exact ⟨e, by simpa [e]⟩
 
 end TM2Comp
