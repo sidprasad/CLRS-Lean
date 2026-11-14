@@ -1,4 +1,5 @@
 import Mathlib
+import SpytialLean
 
 /-!
 # CLRS Section 13.1 - Red-black trees
@@ -106,7 +107,36 @@ inductive RBTree where
   | node : Color → RBTree → Nat → RBTree → RBTree
   deriving Repr, DecidableEq
 
+-- The constructor has positional arguments: color, left, key, right.
+-- Spytial exposes them as node_0, node_1, node_2, and node_3 respectively.
+-- Match the empty constructor explicitly so opaque subtrees in proofs remain visible.
+open SpytialLean in
+spytial_spec RBTree [
+  orientation node_1.*(node_1 + node_3) &
+    ((RBTree - {t : RBTree | @:t = empty}) ->
+      (RBTree - {t : RBTree | @:t = empty})) left below,
+  orientation node_3.*(node_1 + node_3) &
+    ((RBTree - {t : RBTree | @:t = empty}) ->
+      (RBTree - {t : RBTree | @:t = empty})) right below,
+  align (~(node_1 + node_3).(node_1 + node_3) - iden) &
+    ((RBTree - {t : RBTree | @:t = empty}) ->
+      (RBTree - {t : RBTree | @:t = empty})) horizontal,
+  tag RBTree "key" node_2,
+  hideField node_2,
+  hideField node_0,
+  hideAtom Color + Nat + {t : RBTree | @:t = empty},
+  edgeStyle node_1 noLabels,
+  edgeStyle node_3 noLabels,
+  atomStyle {t : RBTree | @:(t.node_0) = red}
+    (borderStyle "#b91c1c" 2) (fillStyle "#fee2e2") (textStyle "#7f1d1d"),
+  atomStyle {t : RBTree | @:(t.node_0) = black}
+    (borderStyle "#111827" 3) (fillStyle "#f3f4f6") (textStyle "#111827")
+]
+
 namespace RBTree
+
+-- Diagram inspections deliberately leave the proof goal unchanged.
+#allow_unused_tactic SpytialLean.spytialTactic
 
 /-- Membership of a key in a colored binary tree. -/
 def InTree (x : Nat) : RBTree → Prop
@@ -215,6 +245,8 @@ theorem noRedRed_repaint_black {t : RBTree}
       trivial
   | node color left key right =>
       simp [repaintRoot, NoRedRed]
+      spytial (node .black left key right) fyi [h.1, h.2.1] with [
+        .., hideField NoRedRed]
       exact ⟨h.1, h.2.1⟩
 
 /-- Repainting the root preserves balanced child black heights. -/
@@ -281,6 +313,21 @@ theorem redBlackShape_repaint_rotateLeft_red_red
     RedBlackShape
       (repaintRoot Color.black
         (rotateLeft (node Color.red a x (node Color.red b y c)))) := by
+  let input := node .red a x (node .red b y c)
+  let rotated := rotateLeft input
+  let repaired := repaintRoot .black rotated
+  -- hab and hbc equate the black heights of the fringe subtrees a, b, and c.
+  spytial input observing [blackHeight] with [
+    .., attribute blackHeight,
+    hideField RootBlack, hideField NoRedRed, hideField BalancedBlackHeight]
+  spytial rotated observing [blackHeight] with [
+    .., attribute blackHeight,
+    hideField RootBlack, hideField NoRedRed, hideField BalancedBlackHeight]
+    titled "After rotation"
+  spytial repaired observing [blackHeight] with [
+    .., attribute blackHeight,
+    hideField RootBlack, hideField NoRedRed, hideField BalancedBlackHeight]
+    titled "After repaint"
   rcases ha with ⟨haRoot, haNoRed, haBalanced⟩
   rcases hb with ⟨hbRoot, hbNoRed, hbBalanced⟩
   rcases hc with ⟨_, hcNoRed, hcBalanced⟩

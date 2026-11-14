@@ -51,9 +51,16 @@ scripts/check_repository.py  ← fast repository-wide checks
 
 ## Lean version & dependencies
 
-- **Lean**: `leanprover/lean4:v4.32.0-rc1`
-- **Mathlib**: `v4.32.0-rc1`
-- **Verso**: `main` branch (literate HTML generation)
+- **Lean**: `leanprover/lean4:v4.33.1`
+- **Mathlib**: `v4.33.1`
+- **Verso**: `v4.33.0` (literate HTML generation)
+- **Spytial-Lean**: `v0.2.1`
+
+The Lake configuration preserves the previous implicit-definition matching
+behavior with `backward.isDefEq.respectTransparency = false`. Direct
+`lake env lean` file checks need `-Dbackward.isDefEq.respectTransparency=false`
+when re-elaborating proofs that rely on that behavior. Kernel checking and the
+chapter axiom audits are unchanged.
 
 ## Build commands
 

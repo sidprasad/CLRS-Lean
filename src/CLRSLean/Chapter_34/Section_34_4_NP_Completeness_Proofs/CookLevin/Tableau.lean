@@ -199,7 +199,6 @@ private noncomputable def cfgStacksEquivFin
     (cfgStacksEquivFin tm H ⟨k, i⟩).val =
       cfgStackBitOffset tm H k + (cfgStackLocalEquivFin tm H k i).val := by
   simp [cfgStacksEquivFin, cfgStackBitOffset, finSigmaFinEquiv_apply]
-  congr
 
 /-- Canonical finite numbering of all row coordinates.
 
